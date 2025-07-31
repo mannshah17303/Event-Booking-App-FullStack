@@ -44,13 +44,13 @@ export const userController = {
 
       const cookieOptions: CookieOptions = {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
+        secure: true,
         expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
       };
       res.cookie("token", token, cookieOptions);
       sendResponse(res, 200, "Login successful", user);
     } catch (error: any) {
-      //status code 500(internal server error)
       sendResponse(res, 500, error.message, null);
     }
   },
