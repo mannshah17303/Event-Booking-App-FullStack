@@ -11,6 +11,9 @@ import paymentRoutes from "./routes/payment_routes";
 import groupRoutes from "./routes/group_event_routes"
 import helmet from "helmet";
 import "./utils/emailSchedular";
+import dotenv from "dotenv"
+dotenv.config()
+
 
 import cors from "cors";
 
@@ -20,7 +23,7 @@ app.use(helmet())
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
@@ -37,7 +40,7 @@ app.use("/events", eventRoutes);
 app.use("/payments", paymentRoutes);
 app.use("/group", groupRoutes);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 const start = async () => {
   try {
@@ -45,7 +48,7 @@ const start = async () => {
     await sequelize.sync({ alter: true });
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on ${PORT}`);
     });
   } catch (err) {
     console.error("❌ Failed to start app:", err);

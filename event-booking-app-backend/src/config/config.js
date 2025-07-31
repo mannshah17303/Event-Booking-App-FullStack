@@ -1,3 +1,4 @@
+require("dotenv").config();
 module.exports = {
   development: {
     username: "postgres",
@@ -5,5 +6,15 @@ module.exports = {
     database: "event_booking_app",
     host: "localhost",
     dialect: "postgres",
+  },
+  production: {
+    use_env_variable: "DATABASE_URL",
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // important for Railway
+      },
+    },
   },
 };
