@@ -44,7 +44,8 @@ export const userController = {
 
       const cookieOptions: CookieOptions = {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
+        secure: true,
         expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
       };
       res.cookie("token", token, cookieOptions);
@@ -121,10 +122,7 @@ export const userController = {
   },
 
   async logout(req: Request, res: Response) {
-    res.clearCookie("token", {
-      httpOnly: true,
-      sameSite: "strict",
-    });
+    res.clearCookie("token");
     sendResponse(res, 200, "logout successful");
   },
 
