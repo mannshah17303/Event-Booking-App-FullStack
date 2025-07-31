@@ -34,7 +34,8 @@ async function getEventsForToday() {
   return todayEvents;
 }
 
-cron.schedule("* * * * *", async () => {
+//it will check all day at 12 am
+cron.schedule("0 0 * * *", async () => {
   const groupEventsHappeningToday = await getEventsForToday();
   for (const eventMember of groupEventsHappeningToday) {
     await mailService.sendMail(
