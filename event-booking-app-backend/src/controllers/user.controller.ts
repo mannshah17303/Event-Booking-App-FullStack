@@ -44,8 +44,7 @@ export const userController = {
 
       const cookieOptions: CookieOptions = {
         httpOnly: true,
-        sameSite: "none",
-        secure: true,
+        sameSite: "strict",
         expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
       };
       res.cookie("token", token, cookieOptions);
