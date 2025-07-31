@@ -22,11 +22,11 @@ const currentUser = computed(() => store.state.loggedInUser);
 let groupEvents = ref<GroupEvent[]>([]);
 let allGroupEventMembers = ref<any>([]);
 onMounted(async () => {
-  const response = await axios.get("http://localhost:3000/group", {
+  const response = await axios.get("https://event-booking-app-fullstack.onrender.com/group", {
     withCredentials: true,
   });
   const groupEventMembers = await axios.get(
-    "http://localhost:3000/group/members",
+    "https://event-booking-app-fullstack.onrender.com/group/members",
     {
       withCredentials: true,
     }
@@ -59,7 +59,7 @@ const handleJoinClick = async (
         groupId,
         userId: currentUser.value.user_id,
       };
-      await axios.delete("http://localhost:3000/group/removeMember", {
+      await axios.delete("https://event-booking-app-fullstack.onrender.com/group/removeMember", {
         data: memberToRemove,
         withCredentials: true,
       });
@@ -70,7 +70,7 @@ const handleJoinClick = async (
         groupId,
         userId: currentUser.value.user_id,
       };
-      await axios.post("http://localhost:3000/group/addMember", memberToAdd, {
+      await axios.post("https://event-booking-app-fullstack.onrender.com/group/addMember", memberToAdd, {
         withCredentials: true,
       });
       allGroupEventMembers.value.push({

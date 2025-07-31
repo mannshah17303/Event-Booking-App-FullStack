@@ -25,7 +25,7 @@ watch(
   async (id) => {
     if (!id) return;
     const response = await axios.get(
-      `http://localhost:3000/group/getGroupEventDetailsByGroupId`,
+      `https://event-booking-app-fullstack.onrender.com/group/getGroupEventDetailsByGroupId`,
       {
         params: {
           groupId,
@@ -50,7 +50,7 @@ watch(
 );
 const totalMembersInGroupEvent = ref(0);
 onMounted(async () => {
-  const response = await axios.get("http://localhost:3000/group/calculateMembers", {
+  const response = await axios.get("https://event-booking-app-fullstack.onrender.com/group/calculateMembers", {
     params:{
       groupId
     },
