@@ -74,6 +74,7 @@ const fetchEvents = async () => {
     );
     filteredEvents.value = response.data.data;
     totalCount.value = response.data.totalCount;
+    console.log(response.data.data);
   } catch (error) {
     console.error("Error fetching paginated events:", error);
   } finally {
