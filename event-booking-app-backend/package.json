@@ -24,7 +24,8 @@
     "sequelize-typescript": "^2.1.6",
     "stripe": "^18.3.0",
     "express": "^4.18.2",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
