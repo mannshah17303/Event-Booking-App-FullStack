@@ -119,17 +119,17 @@ const passwordInputData = {
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4"
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 sm:px-6 md:px-8"
   >
     <div
-      class="bg-white shadow-2xl rounded-2xl p-8 border border-gray-200 max-w-md w-full relative overflow-hidden"
+      class="bg-white shadow-2xl rounded-2xl p-6 sm:p-8 border border-gray-200 max-w-full sm:max-w-md w-full relative overflow-hidden"
     >
       <div
         class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"
       ></div>
 
       <form @submit.prevent="submitForm" class="relative z-10">
-        <div class="text-center mt-3 mb-8">
+        <div class="text-center sm:text-left mt-3 mb-8">
           <h2 class="text-3xl font-bold text-gray-800 mb-2">Register</h2>
           <p class="text-gray-600">Sign up with your account</p>
         </div>
@@ -163,10 +163,7 @@ const passwordInputData = {
             <Input
               v-model="formData.name"
               :required="true"
-              :inputTagData="{
-                ...userNameInputData,
-                class: userNameInputData.class + ' pl-10',
-              }"
+              :inputTagData="{ ...userNameInputData, class: userNameInputData.class + ' pl-10' }"
             />
           </div>
           <span v-if="v$.name.$error" class="text-red-500">{{
@@ -202,10 +199,7 @@ const passwordInputData = {
             <Input
               v-model="formData.email"
               :required="true"
-              :inputTagData="{
-                ...userEmailInputData,
-                class: userEmailInputData.class + ' pl-10',
-              }"
+              :inputTagData="{ ...userEmailInputData, class: userEmailInputData.class + ' pl-10' }"
             />
           </div>
           <span v-if="v$.email.$error" class="text-red-500">{{
@@ -241,10 +235,7 @@ const passwordInputData = {
             <Input
               v-model="formData.role"
               :required="true"
-              :inputTagData="{
-                ...roleInputData,
-                class: roleInputData.class + ' pl-10',
-              }"
+              :inputTagData="{ ...roleInputData, class: roleInputData.class + ' pl-10' }"
             />
           </div>
           <span v-if="v$.role.$error" class="text-red-500">{{
@@ -280,10 +271,7 @@ const passwordInputData = {
             <Input
               v-model="formData.password"
               :required="true"
-              :inputTagData="{
-                ...passwordInputData,
-                class: passwordInputData.class + ' pl-10',
-              }"
+              :inputTagData="{ ...passwordInputData, class: passwordInputData.class + ' pl-10' }"
             />
           </div>
           <span v-if="v$.password.$error" class="text-red-500">{{
@@ -367,5 +355,13 @@ button:focus-visible {
     box-shadow;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+@media (max-width: 640px) {
+  form > div.mb-6,
+  form > div.mb-8 {
+    margin-bottom: 1.25rem; /* 20px */
+  }
 }
 </style>
