@@ -99,7 +99,8 @@ export const userController = {
       const token = jwt.sign(payload, secret_key, { expiresIn: "1h" });
       const cookieOptions: CookieOptions = {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
+        secure: true,
         expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
       };
       res.cookie("token", token, cookieOptions);
