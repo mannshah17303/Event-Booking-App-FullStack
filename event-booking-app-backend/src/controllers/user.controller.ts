@@ -123,7 +123,11 @@ export const userController = {
   },
 
   async logout(req: Request, res: Response) {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
     sendResponse(res, 200, "logout successful");
   },
 
