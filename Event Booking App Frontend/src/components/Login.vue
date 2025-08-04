@@ -13,17 +13,15 @@ const formData = ref({
   email: "",
   password: "",
 });
-const rules = computed(() => {
-  return {
-    email: {
-      required: helpers.withMessage("please enter email", required),
-      email: helpers.withMessage("please enter valid email", email),
-    },
-    password: {
-      required: helpers.withMessage("please enter password", required),
-    },
-  };
-});
+const rules = computed(() => ({
+  email: {
+    required: helpers.withMessage("please enter email", required),
+    email: helpers.withMessage("please enter valid email", email),
+  },
+  password: {
+    required: helpers.withMessage("please enter password", required),
+  },
+}));
 
 const v$ = useVuelidate(rules, formData);
 const flag = ref(false);
@@ -91,10 +89,10 @@ const passwordInputData = {
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4"
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 sm:px-6 lg:px-8"
   >
     <div
-      class="bg-white shadow-2xl rounded-2xl p-8 border border-gray-200 max-w-md w-full relative overflow-hidden"
+      class="bg-white shadow-2xl rounded-2xl p-8 border border-gray-200 w-full max-w-md sm:max-w-lg md:max-w-xl relative overflow-hidden"
     >
       <div
         class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"
@@ -102,8 +100,14 @@ const passwordInputData = {
 
       <form @submit.prevent="submitForm" class="relative z-10">
         <div class="text-center mt-3 mb-8">
-          <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
-          <p class="text-gray-600">Sign in to your account</p>
+          <h2
+            class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2"
+          >
+            Welcome Back
+          </h2>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Sign in to your account
+          </p>
         </div>
 
         <div class="mb-6">
@@ -140,7 +144,7 @@ const passwordInputData = {
               }"
             />
           </div>
-          <span v-if="v$.email.$error" class="text-red-500">{{
+          <span v-if="v$.email.$error" class="text-red-500 text-xs sm:text-sm">{{
             v$.email.$errors[0].$message
           }}</span>
         </div>
@@ -179,18 +183,20 @@ const passwordInputData = {
               }"
             />
           </div>
-          <span v-if="v$.password.$error" class="text-red-500">{{
-            v$.password.$errors[0].$message
-          }}</span>
+          <span
+            v-if="v$.password.$error"
+            class="text-red-500 text-xs sm:text-sm"
+          >{{ v$.password.$errors[0].$message }}</span>
         </div>
 
         <div class="flex justify-end mb-6">
-          <a
+          <button
+            type="button"
             @click="forgetPassword"
-            class="text-sm text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-200"
+            class="text-sm sm:text-base text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Forgot password?
-          </a>
+          </button>
         </div>
 
         <div class="mb-6">
@@ -222,20 +228,21 @@ const passwordInputData = {
           <div class="absolute inset-0 flex items-center">
             <div class="w-full border-t border-gray-300"></div>
           </div>
-          <div class="relative flex justify-center text-sm">
+          <div class="relative flex justify-center text-sm sm:text-base">
             <span class="px-2 bg-white text-gray-500">or</span>
           </div>
         </div>
 
         <div class="text-center">
-          <p class="text-gray-600">
+          <p class="text-gray-600 text-sm sm:text-base">
             Don't have an account?
-            <a
+            <button
+              type="button"
               @click="goToRegister"
-              class="text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer transition-colors duration-200 ml-1"
+              class="text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer transition-colors duration-200 ml-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Sign up here
-            </a>
+            </button>
           </p>
         </div>
       </form>
@@ -244,7 +251,6 @@ const passwordInputData = {
 </template>
 
 <style scoped>
-/* Additional custom styles if needed */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -270,5 +276,16 @@ button:focus-visible {
     box-shadow;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 380px) {
+  .min-h-screen {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  form > div > label {
+    font-size: 0.875rem;
+  }
 }
 </style>
