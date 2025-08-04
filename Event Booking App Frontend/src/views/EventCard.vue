@@ -74,7 +74,6 @@ const fetchEvents = async () => {
     );
     filteredEvents.value = response.data.data;
     totalCount.value = response.data.totalCount;
-    console.log(response.data.data);
   } catch (error) {
     console.error("Error fetching paginated events:", error);
   } finally {
@@ -155,175 +154,431 @@ const showAvgRatings = (eventId: number) => {
 </script>
 
 <template>
-  <div class="flex w-[100%] justify-between">
-    <div>
-      <SearchEvent @filter-event="searchedValue" />
+  <v-container fluid class="events-container pa-2 pa-sm-4">
+   
+    <div class="controls-section">
+      <div class="search-wrapper">
+        <SearchEvent @filter-event="searchedValue" />
+      </div>
+      
+      <div class="filters-wrapper">
+        <v-select
+          class="filter-select"
+          v-model="sortBy"
+          :items="['name', 'date', 'location', 'price', 'ratings']"
+          label="Sort by"
+          variant="outlined"
+          density="compact"
+          hide-details
+        ></v-select>
+        
+        <v-select
+          class="filter-select"
+          v-model="sortType"
+          :items="['ASC', 'DESC']"
+          label="Sort type"
+          variant="outlined"
+          density="compact"
+          hide-details
+        ></v-select>
+      </div>
     </div>
-    <div class="flex mt-4">
-      <v-select
-        class="w-[150px] h-[50px] mr-2 rounded-3xl"
-        v-model="sortBy"
-        :items="['name', 'date', 'location', 'price', 'ratings']"
-        label="sort by"
-      ></v-select>
-      <v-select
-        class="w-[150px] h-[50px] mr-4 rounded-3xl"
-        v-model="sortType"
-        :items="['ASC', 'DESC']"
-        label="sort type"
-      ></v-select>
-    </div>
-  </div>
-  <div v-if="spinnerLoading" class="spinner-overlay">
-    <VueSpinner
-      size="50"
-      color="black"
-      class="flex justify-between align-middle"
-    />
-  </div>
 
-  <v-row
-    v-else-if="filteredEvents.length > 0"
-    v-for="(event, index) in filteredEvents"
-    :key="event.event_id"
-  >
-    <v-col cols="12">
+    
+    <div v-if="spinnerLoading" class="spinner-overlay">
+      <VueSpinner size="50" color="#1976d2" />
+    </div>
+
+    
+    <div v-else-if="filteredEvents.length > 0" class="events-grid">
       <v-card
+        v-for="(event, index) in filteredEvents"
+        :key="event.event_id"
         class="event-card"
         v-fade-in="index * 100"
         @click="showEventDetails(event.event_id)"
+        elevation="4"
       >
         <div class="image-wrapper">
           <v-img
             :src="event.image_url"
             class="background-image"
             cover
-            height="50vh"
+            :height="$vuetify.display.xs ? '200px' : '300px'"
           />
-          <div class="card-content">
-            <v-card-title style="display: flex">
-              <strong>{{ event.event_title }}</strong>
-              <i
-                @click="toggleHeart(event.event_id, $event)"
-                :class="
-                  isFavorite(event.event_id)
-                    ? 'mdi mdi-heart text-red-500'
-                    : 'mdi mdi-heart'
-                "
-              ></i>
-            </v-card-title>
-            <v-card-subtitle>
-              <strong>{{ event.event_description }}</strong>
-            </v-card-subtitle>
-            <v-card-subtitle class="mt-3">
-              <strong>{{ event.event_location }}</strong>
-            </v-card-subtitle>
-            <v-card-subtitle class="mt-3">
-              <strong>₹{{ event.price }}</strong>
-            </v-card-subtitle>
-            <v-card-subtitle class="mt-3">
-              ⭐ <strong>{{ showAvgRatings(event.event_id) }}</strong>
-            </v-card-subtitle>
+          
+          <div class="card-overlay">
+            <div class="card-content">
+              
+              <div class="content-header">
+                <h2 class="event-title">{{ event.event_title }}</h2>
+                <v-btn
+                  icon
+                  size="small"
+                  class="heart-btn"
+                  @click="toggleHeart(event.event_id, $event)"
+                  :color="isFavorite(event.event_id) ? 'red' : 'white'"
+                  variant="text"
+                >
+                  <v-icon>
+                    {{ isFavorite(event.event_id) ? 'mdi-heart' : 'mdi-heart-outline' }}
+                  </v-icon>
+                </v-btn>
+              </div>
+
+             
+              <div class="event-details">
+                <div class="detail-item">
+                  <v-icon size="small" class="detail-icon">mdi-text-box-outline</v-icon>
+                  <span class="detail-text">{{ event.event_description }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <v-icon size="small" class="detail-icon">mdi-map-marker</v-icon>
+                  <span class="detail-text">{{ event.event_location }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <v-icon size="small" class="detail-icon">mdi-currency-inr</v-icon>
+                  <span class="detail-text price-text">{{ event.price }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <v-icon size="small" class="detail-icon">mdi-star</v-icon>
+                  <span class="detail-text">{{ showAvgRatings(event.event_id) || 'No ratings' }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </v-card>
-    </v-col>
-  </v-row>
+    </div>
 
-  <v-card v-else class="text-center justify-between mt-5">
-    No Events Available
-  </v-card>
+   
+    <v-card v-else class="no-events-card text-center pa-8 ma-4">
+      <v-icon size="64" color="grey-lighten-1" class="mb-4">mdi-calendar-remove</v-icon>
+      <h3 class="text-h5 mb-2">No Events Available</h3>
+      <p class="text-body-1 text-medium-emphasis">
+        Try adjusting your search or filter criteria
+      </p>
+    </v-card>
 
-  <div class="pagination">
-    <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
-      Previous
-    </button>
-
-    <button
-      v-for="page in totalPages"
-      :key="page"
-      :class="{ active: page === currentPage }"
-      @click="goToPage(page)"
-    >
-      {{ page }}
-    </button>
-
-    <button
-      :disabled="currentPage === totalPages"
-      @click="goToPage(currentPage + 1)"
-    >
-      Next
-    </button>
-  </div>
+    
+    <div class="pagination-wrapper" v-if="totalPages > 1">
+      <v-pagination
+        v-model="currentPage"
+        :length="totalPages"
+        :total-visible="$vuetify.display.xs ? 5 : 7"
+        class="custom-pagination"
+        @update:model-value="goToPage"
+      ></v-pagination>
+    </div>
+  </v-container>
 </template>
 
 <style scoped>
+
+.events-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .controls-section {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+  }
+}
+
+.search-wrapper {
+  flex: 1;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .search-wrapper {
+    max-width: 400px;
+  }
+}
+
+.filters-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .filters-wrapper {
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .filters-wrapper {
+    width: auto;
+    min-width: 320px;
+  }
+}
+
+.filter-select {
+  min-width: 140px;
+}
+
+@media (max-width: 479px) {
+  .filter-select {
+    min-width: 100%;
+  }
+}
+
+/* Events Grid */
+.events-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+}
+
+
+.event-card {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.background-image {
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover .background-image {
+  transform: scale(1.05);
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 2;
+}
+
+.card-content {
+  padding: 16px;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .card-content {
+    padding: 20px;
+  }
+}
+
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.event-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  flex: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 768px) {
+  .event-title {
+    font-size: 1.5rem;
+  }
+}
+
+.heart-btn {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.heart-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .event-details {
+    gap: 10px;
+  }
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .detail-item {
+    font-size: 0.95rem;
+  }
+}
+
+.detail-icon {
+  color: rgba(255, 255, 255, 0.8);
+  flex-shrink: 0;
+}
+
+.detail-text {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  display: box;               
+  -webkit-box-orient: vertical;
+  box-orient: vertical;       
+  -webkit-line-clamp: 2;
+  line-clamp: 2;             
+}
+
+
+.price-text {
+  font-weight: 600;
+  color: #4ade80;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+
 .spinner-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
 }
 
-.image-wrapper {
-  position: relative;
-  height: 50vh;
-  overflow: hidden;
+
+.no-events-card {
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 16px;
 }
 
-.background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  filter: blur(8px);
-  z-index: 0;
-}
 
-.card-content {
-  position: relative;
-  z-index: 1;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.3);
-  height: 100%;
+.pagination-wrapper {
   display: flex;
-  flex-direction: column;
-}
-
-.mdi-heart {
-  margin-left: auto;
-}
-
-.pagination {
-  display: flex;
-  gap: 8px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 32px;
+  padding: 0 16px;
 }
 
-button {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  background-color: white;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 4px;
+.custom-pagination {
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-button[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+@media (max-width: 479px) {
+  .event-title {
+    font-size: 1.1rem;
+  }
+  
+  .detail-item {
+    font-size: 0.8rem;
+  }
+  
+  .card-content {
+    padding: 12px;
+  }
+  
+  .content-header {
+    margin-bottom: 12px;
+  }
 }
 
-button.active {
-  background-color: #3b82f6; /* blue */
-  color: white;
-  border-color: #3b82f6;
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.event-card {
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 </style>

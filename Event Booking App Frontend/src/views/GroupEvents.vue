@@ -85,12 +85,13 @@ const handleJoinClick = async (
 
 const isJoinedGroupOrNot = (groupId: number) => {
   if (!allGroupEventMembers.value) return false;
-  if(currentUser.value === null){
+  if (currentUser.value === null) {
     return false;
-  }else{
-
+  } else {
     return allGroupEventMembers.value.some(
-      (member: any) => member.group_id === groupId && member.user_id === currentUser.value.user_id
+      (member: any) =>
+        member.group_id === groupId &&
+        member.user_id === currentUser.value.user_id
     );
   }
 };
@@ -120,11 +121,21 @@ const isJoinedGroupOrNot = (groupId: number) => {
             height="50vh"
           />
           <div class="card-content">
-            <v-card-title style="display: flex; justify-content: space-between">
+            <v-card-title
+              style="
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+              "
+            >
               <strong>{{ event.name }}</strong>
-              <v-btn @click="handleJoinClick(event.group_id, $event)" :color="isJoinedGroupOrNot(event.group_id) ? 'green' : 'white'">{{
-                isJoinedGroupOrNot(event.group_id) ? "Joined" : "Join"
-              }}</v-btn>
+              <v-btn
+                @click="handleJoinClick(event.group_id, $event)"
+                :color="isJoinedGroupOrNot(event.group_id) ? 'green' : 'white'"
+                >{{
+                  isJoinedGroupOrNot(event.group_id) ? "Joined" : "Join"
+                }}</v-btn
+              >
             </v-card-title>
             <v-card-subtitle>
               <strong>{{ event.description }}</strong>
@@ -173,6 +184,7 @@ const isJoinedGroupOrNot = (groupId: number) => {
   height: 100%;
   filter: blur(8px);
   z-index: 0;
+  max-width: 100%;
 }
 
 .card-content {
@@ -180,9 +192,38 @@ const isJoinedGroupOrNot = (groupId: number) => {
   z-index: 1;
   color: white;
   background-color: rgba(0, 0, 0, 0.3);
-  height: 100%;
+  padding: 16px;
   display: flex;
   flex-direction: column;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal !important;
+  max-width: 100%;
+}
+
+v-card-title,
+v-card-subtitle {
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+v-card-title {
+  display: flex !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+v-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: 14px;
+  padding: 6px 12px;
 }
 
 .mdi-heart {
@@ -211,8 +252,22 @@ button[disabled] {
 }
 
 button.active {
-  background-color: #3b82f6; /* blue */
+  background-color: #3b82f6;
   color: white;
   border-color: #3b82f6;
+}
+
+@media (max-width: 600px) {
+  .image-wrapper {
+    height: 30vh !important;
+  }
+  .card-content {
+    font-size: 14px;
+    padding: 8px;
+  }
+  v-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
 }
 </style>
