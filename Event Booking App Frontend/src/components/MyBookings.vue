@@ -273,40 +273,43 @@ const goToPage = (page: number) => {
 </script>
 
 <template>
-  <div class="flex">
-    <div class="flex w-[100%]">
+  <div
+    class="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-4 mb-4"
+  >
+    <div class="flex flex-col sm:flex-row flex-wrap gap-2 w-full">
       <SearchEvent @filter-event="searchedValue" />
-      <Button @click="downloadBookings" :buttonTagData="pdfDownloadTagData" />
-      <Button
-        v-if="!showContactForm"
-        @click="openContactForm"
-        :buttonTagData="openContactFormButtonTagData"
-      />
-    </div>
-    <div class="flex w-[100%] justify-end">
-      <div class="flex ml-3 mt-4">
-        <v-select
-          class="w-[150px] h-[50px] mr-2 rounded-3xl"
-          v-model="sortBy"
-          :items="['name', 'date', 'location', 'price', 'ratings']"
-          label="sort by"
-        ></v-select>
-        <v-select
-          class="w-[150px] h-[50px] mr-4 rounded-3xl"
-          v-model="sortType"
-          :items="['ASC', 'DESC']"
-          label="sort type"
-        ></v-select>
+      <div class="flex flex-wrap gap-2">
+        <Button @click="downloadBookings" :buttonTagData="pdfDownloadTagData" />
+        <Button
+          v-if="!showContactForm"
+          @click="openContactForm"
+          :buttonTagData="openContactFormButtonTagData"
+        />
       </div>
     </div>
+    <div class="flex flex-col sm:flex-row gap-2 ml-0 sm:ml-3 mt-2 sm:mt-4">
+      <v-select
+        class="w-full sm:w-[150px] h-[50px] mr-0 sm:mr-2 rounded-3xl"
+        v-model="sortBy"
+        :items="['name', 'date', 'location', 'price', 'ratings']"
+        label="sort by"
+      ></v-select>
+      <v-select
+        class="w-full sm:w-[150px] h-[50px] rounded-3xl"
+        v-model="sortType"
+        :items="['ASC', 'DESC']"
+        label="sort type"
+      ></v-select>
+    </div>
   </div>
+
   <div
     v-if="showContactForm"
-    class="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50"
+    class="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-4"
     @click="handleClickApartFromForm"
   >
     <div
-      class="bg-black shadow-2xl pl-3 pr-3 rounded-2xl p-8 border-3 border-white max-w-md w-full mx-4 h-[600px] overflow-y-scroll"
+      class="bg-black shadow-2xl rounded-2xl p-8 border-3 border-white w-full max-w-md sm:max-w-lg h-[90vh] overflow-y-auto"
       @click.stop
     >
       <form @submit.prevent="submitContact">
@@ -326,14 +329,10 @@ const goToPage = (page: number) => {
         </div>
 
         <div class="mb-6">
-          <label
-            for="email"
-            class="block text-sm font-semibold text-white mb-2"
+          <label for="email" class="block text-sm font-semibold text-white mb-2"
+            >Email</label
           >
-            email
-          </label>
           <Input v-model="formData.email" :inputTagData="emailInputData" />
-
           <span v-if="v$.email.$error" class="text-red-500">{{
             v$.email.$errors[0].$message
           }}</span>
@@ -343,14 +342,12 @@ const goToPage = (page: number) => {
           <label
             for="number"
             class="block text-sm font-semibold text-white mb-2"
+            >Phone Number</label
           >
-            Phone Number
-          </label>
           <Input
             v-model="formData.number"
             :inputTagData="phoneNumberInputData"
           />
-
           <span v-if="v$.number.$error" class="text-red-500">{{
             v$.number.$errors[0].$message
           }}</span>
@@ -360,9 +357,8 @@ const goToPage = (page: number) => {
           <label
             for="eventTitle"
             class="block text-sm font-semibold text-white mb-2"
+            >Event Name</label
           >
-            Event Name
-          </label>
           <Input
             v-model="formData.event_name"
             :inputTagData="eventNameInputData"
@@ -376,11 +372,9 @@ const goToPage = (page: number) => {
           <label
             for="message"
             class="block text-sm font-semibold text-white mb-2"
+            >Message</label
           >
-            Message
-          </label>
           <Input v-model="formData.message" :inputTagData="messageInputData" />
-
           <span v-if="v$.message.$error" class="text-red-500">{{
             v$.message.$errors[0].$message
           }}</span>
@@ -397,6 +391,7 @@ const goToPage = (page: number) => {
       </form>
     </div>
   </div>
+
   <v-row v-if="filteredEvents.length > 0" v-for="booking in filteredEvents">
     <v-col cols="12">
       <v-card
@@ -437,16 +432,17 @@ const goToPage = (page: number) => {
           <strong>₹{{ booking.event.price }}</strong>
         </div>
         <div class="text-h7 ml-3 mt-3">
-          Payment Status:
-          <strong class="text-green-500">Completed</strong>
+          Payment Status: <strong class="text-green-500">Completed</strong>
         </div>
       </v-card>
     </v-col>
   </v-row>
-  <v-card v-else class="text-center justify-between mt-5"
-    >No booked events available</v-card
-  >
-  <div class="pagination">
+
+  <v-card v-else class="text-center justify-between mt-5">
+    No booked events available
+  </v-card>
+
+  <div class="pagination flex flex-wrap justify-center items-center gap-2 mt-6">
     <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
       Previous
     </button>
@@ -487,20 +483,14 @@ const goToPage = (page: number) => {
   color: gold;
 }
 
-.pagination {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-button {
-  padding: 6px 12px;
+.pagination button {
+  padding: 10px 14px;
   border: 1px solid #ccc;
   background-color: white;
   cursor: pointer;
   user-select: none;
   border-radius: 4px;
+  min-width: 40px;
 }
 
 button[disabled] {
@@ -512,5 +502,15 @@ button.active {
   background-color: #3b82f6;
   color: white;
   border-color: #3b82f6;
+}
+
+@media (max-width: 640px) {
+  .star-rating span {
+    font-size: 1.5em;
+  }
+
+  .mdi-close {
+    font-size: 24px;
+  }
 }
 </style>
