@@ -214,9 +214,7 @@ const userEmailInputData = {
 
 <template>
   <div class="max-w-7xl mx-auto px-4 py-10 space-y-10">
-    
     <div class="flex flex-col md:flex-row justify-between gap-6 mb-5">
-     
       <div
         class="bg-white shadow-xl rounded-xl p-8 border border-gray-200 w-full md:max-w-xl"
       >
@@ -225,7 +223,10 @@ const userEmailInputData = {
         </h2>
         <form @submit.prevent="submitForm">
           <div class="mb-5">
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              for="name"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
               Name
             </label>
             <Input v-model="formData.name" :inputTagData="userNameInputData" />
@@ -235,10 +236,16 @@ const userEmailInputData = {
           </div>
 
           <div class="mb-6">
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
-            <Input v-model="formData.email" :inputTagData="userEmailInputData" />
+            <Input
+              v-model="formData.email"
+              :inputTagData="userEmailInputData"
+            />
             <p v-if="v$.email.$error" class="text-red-500 text-sm mt-1">
               {{ v$.email.$errors[0].$message }}
             </p>
@@ -253,7 +260,6 @@ const userEmailInputData = {
         </form>
       </div>
 
-     
       <div class="bg-white shadow-xl rounded-xl p-6 w-full md:flex-1 h-fit">
         <p class="text-gray-500 text-center mb-2 font-medium">Total Spent</p>
         <p class="text-3xl font-extrabold text-center text-blue-700 mb-4">
@@ -273,7 +279,6 @@ const userEmailInputData = {
       </div>
     </div>
 
-    
     <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1">
         <ApexChart
@@ -295,7 +300,6 @@ const userEmailInputData = {
       </div>
     </div>
 
-   
     <v-card
       v-if="bookedData.length === 0"
       class="text-center justify-between mt-5"
@@ -333,7 +337,6 @@ const userEmailInputData = {
       </v-row>
     </div>
 
-   
     <v-card
       v-if="bookedData.length === 0"
       class="text-center justify-between mt-5"
@@ -373,7 +376,6 @@ const userEmailInputData = {
       </v-card>
     </div>
 
-    
     <v-card
       v-if="upcomingEvents.length === 0"
       class="text-center justify-between mt-5"
