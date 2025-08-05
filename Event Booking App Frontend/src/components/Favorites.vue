@@ -67,25 +67,29 @@ const goToPage = (page: number) => {
 </script>
 
 <template>
-  <div class="flex w-[100%] justify-between">
+  <div
+    class="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-4 mb-4"
+  >
     <div>
       <SearchEvent @filter-event="searchedValue" />
     </div>
-    <div class="flex mt-4">
+
+    <div class="flex flex-col sm:flex-row gap-2 sm:mt-4">
       <v-select
-        class="w-[150px] h-[50px] mr-2 rounded-3xl"
+        class="w-full sm:w-[150px] h-[50px] mr-0 sm:mr-2 rounded-3xl"
         v-model="sortBy"
         :items="['name', 'date', 'location', 'price']"
         label="sort by"
       ></v-select>
       <v-select
-        class="w-[150px] h-[50px] mr-4 rounded-3xl"
+        class="w-full sm:w-[150px] h-[50px] rounded-3xl"
         v-model="sortType"
         :items="['ASC', 'DESC']"
         label="sort type"
       ></v-select>
     </div>
   </div>
+
   <div v-if="spinnerLoading" class="spinner-overlay">
     <VueSpinner
       size="50"
@@ -93,19 +97,20 @@ const goToPage = (page: number) => {
       class="flex justify-between align-middle"
     />
   </div>
+
   <v-row
     v-else-if="filteredEvents.length > 0"
     v-for="favorite in filteredEvents"
+    :key="favorite.event.event_id"
   >
     <v-col cols="12">
       <v-card
         color="surface-variant"
-        :key="favorite.event.event_id"
         :image="favorite.event.image_url"
         style="min-height: 50vh; background-size: cover; overflow: hidden"
         @click="showEventDetails(favorite.event.event_id)"
       >
-        <v-card-title style="display: flex">
+        <v-card-title class="flex">
           <strong>{{ favorite.event.event_title }}</strong>
         </v-card-title>
         <v-card-subtitle>
@@ -120,10 +125,12 @@ const goToPage = (page: number) => {
       </v-card>
     </v-col>
   </v-row>
-  <v-card v-else class="text-center justify-between mt-5"
-    >No Favorite Events Available</v-card
-  >
-  <div class="pagination">
+
+  <v-card v-else class="text-center justify-between mt-5">
+    No Favorite Events Available
+  </v-card>
+
+  <div class="pagination flex flex-wrap justify-center items-center gap-2 mt-6">
     <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
       Previous
     </button>
@@ -157,13 +164,6 @@ const goToPage = (page: number) => {
   align-items: center;
 }
 
-.pagination {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
 button {
   padding: 6px 12px;
   border: 1px solid #ccc;
@@ -171,6 +171,7 @@ button {
   cursor: pointer;
   user-select: none;
   border-radius: 4px;
+  min-width: 40px;
 }
 
 button[disabled] {
@@ -182,5 +183,13 @@ button.active {
   background-color: #3b82f6;
   color: white;
   border-color: #3b82f6;
+}
+
+@media (max-width: 640px) {
+  .v-card-title,
+  .v-card-subtitle {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 </style>
