@@ -214,21 +214,20 @@ const userEmailInputData = {
 
 <template>
   <div class="max-w-7xl mx-auto px-4 py-10 space-y-10">
-    <div class="flex justify-between">
+    
+    <div class="flex flex-col md:flex-row justify-between gap-6 mb-5">
+     
       <div
-        class="bg-white shadow-xl rounded-xl p-8 border border-gray-200 max-w-4xl w-50 mb-4"
+        class="bg-white shadow-xl rounded-xl p-8 border border-gray-200 w-full md:max-w-xl"
       >
         <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">
           Edit Profile
         </h2>
-
         <form @submit.prevent="submitForm">
           <div class="mb-5">
-            <label
-              for="name"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Name</label
-            >
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+              Name
+            </label>
             <Input v-model="formData.name" :inputTagData="userNameInputData" />
             <p v-if="v$.name.$error" class="text-red-500 text-sm mt-1">
               {{ v$.name.$errors[0].$message }}
@@ -236,15 +235,10 @@ const userEmailInputData = {
           </div>
 
           <div class="mb-6">
-            <label
-              for="email"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Email</label
-            >
-            <Input
-              v-model="formData.email"
-              :inputTagData="userEmailInputData"
-            />
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <Input v-model="formData.email" :inputTagData="userEmailInputData" />
             <p v-if="v$.email.$error" class="text-red-500 text-sm mt-1">
               {{ v$.email.$errors[0].$message }}
             </p>
@@ -258,28 +252,29 @@ const userEmailInputData = {
           </button>
         </form>
       </div>
-      <div class="flex justify-center mt-4">
-        <div class="bg-white shadow-xl rounded-xl p-6 max-w-xl w-full h-0">
-          <p class="text-gray-500 text-center mb-2 font-medium">Total Spent</p>
-          <p class="text-3xl font-extrabold text-center text-blue-700 mb-4">
-            ₹{{ totalAmountSpend }}
-          </p>
 
-          <div
-            class="flex space-x-3 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-blue-500"
-          >
-            <img
-              v-for="booking in bookedData"
-              :key="booking.id"
-              :src="booking.event.image_url"
-              class="flex-grow h-40 object-cover rounded-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
-            />
-          </div>
+     
+      <div class="bg-white shadow-xl rounded-xl p-6 w-full md:flex-1 h-fit">
+        <p class="text-gray-500 text-center mb-2 font-medium">Total Spent</p>
+        <p class="text-3xl font-extrabold text-center text-blue-700 mb-4">
+          ₹{{ totalAmountSpend }}
+        </p>
+
+        <div
+          class="flex space-x-3 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-blue-500"
+        >
+          <img
+            v-for="booking in bookedData"
+            :key="booking.id"
+            :src="booking.event.image_url"
+            class="flex-grow h-40 object-cover rounded-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
+          />
         </div>
       </div>
     </div>
 
-    <div class="max-w-7xl p-6 flex flex-col md:flex-row gap-6 mb-4">
+    
+    <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1">
         <ApexChart
           type="line"
@@ -300,11 +295,14 @@ const userEmailInputData = {
       </div>
     </div>
 
+   
     <v-card
       v-if="bookedData.length === 0"
       class="text-center justify-between mt-5"
-      >No booked events available</v-card
     >
+      No booked events available
+    </v-card>
+
     <div v-else-if="bookedData.length > 0" class="space-y-4 mb-4">
       <h2 class="text-2xl font-bold text-gray-800">Total Events Booked</h2>
       <v-row>
@@ -335,11 +333,14 @@ const userEmailInputData = {
       </v-row>
     </div>
 
+   
     <v-card
       v-if="bookedData.length === 0"
       class="text-center justify-between mt-5"
-      >No last booked event available</v-card
     >
+      No last booked event available
+    </v-card>
+
     <div v-else-if="bookedData?.length > 0" class="space-y-4 mb-4">
       <h2 class="text-2xl font-bold text-gray-800">Last Event Booked</h2>
       <v-card
@@ -372,11 +373,14 @@ const userEmailInputData = {
       </v-card>
     </div>
 
+    
     <v-card
       v-if="upcomingEvents.length === 0"
       class="text-center justify-between mt-5"
-      >No upcoming events available</v-card
     >
+      No upcoming events available
+    </v-card>
+
     <div v-else-if="upcomingEvents.length > 0" class="space-y-4">
       <h2 class="text-2xl font-bold text-gray-800">Upcoming Events</h2>
       <v-row>
