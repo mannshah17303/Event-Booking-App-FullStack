@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
 import { GroupEventMembers, GroupEvents } from "../models";
 import { sendResponse } from "../utils/sendResponse";
+import { Op } from "sequelize";
 
 export const groupController = {
   async getAllGroupEvents(req: Request, res: Response) {
     try {
-      const groupEvents = await GroupEvents.findAll();
+      const today = new Date().toISOString().split("T")[0]
+      const groupEvents = await GroupEvents.findAll({
+        where:{
+          date:{
+            [Op.gte]: today
+          }
+        }
+      });
       sendResponse(res, 200, "data fetched successful", groupEvents);
     } catch (error: any) {
       sendResponse(res, 500, error.message, null);
